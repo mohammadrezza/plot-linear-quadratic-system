@@ -11,6 +11,7 @@ class Color:
 
 
 factor = dict()
+x = None
 
 
 def init_equations_factors():
@@ -24,22 +25,37 @@ def init_equations_factors():
 
 
 def init_subplot():
+    global x
     fig, ax = plt.subplots(figsize=FIG_SIZE)
     plt.subplots_adjust(left=0.25, bottom=0.5)
     plt.axis([-RANGE, RANGE, -RANGE, RANGE], )
     x = np.arange(-RANGE, RANGE, STEP)
 
+
 def init_sliders():
     ax_a = plt.axes([left_offset, 0.05, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    s_a = Slider(ax_a, 'a', -RANGE, RANGE, valinit=factor["a"])
+    Slider(ax_a, 'a', -RANGE, RANGE, valinit=factor["a"]).on_changed(update)
     ax_b = plt.axes([left_offset, 0.1, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    s_b = Slider(ax_b, 'b', -RANGE, RANGE, valinit=factor["b"])
+    Slider(ax_b, 'b', -RANGE, RANGE, valinit=factor["b"]).on_changed(update)
     ax_c = plt.axes([left_offset, 0.15, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    s_c = Slider(ax_c, 'c', -RANGE, RANGE, valinit=factor["c"])
+    Slider(ax_c, 'c', -RANGE, RANGE, valinit=factor["c"]).on_changed(update)
     ax_d = plt.axes([left_offset, 0.25, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    s_d = Slider(ax_d, 'd', -RANGE, RANGE, valinit=factor["d"])
+    Slider(ax_d, 'd', -RANGE, RANGE, valinit=factor["d"]).on_changed(update)
     ax_e = plt.axes([left_offset, 0.3, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    s_e = Slider(ax_e, 'e', -RANGE, RANGE, valinit=factor["e"])
+    Slider(ax_e, 'e', -RANGE, RANGE, valinit=factor["e"]).on_changed(update)
+
+
+def init_equations_funcs():
+    quadratic = (factor["a"] * x) ** 2 + factor["b"] * x + factor["c"]
+    linear = factor["d"] * x + factor["e"]
+    quad, = plt.plot(x, quadratic, lw=1, color=Color.green)
+    line, = plt.plot(x, linear, lw=1, color=Color.blue)
+    intersect, = plt.plot(0, 0, 'ro')
+
+
+def update(val):
+    pass
+
 
 if __name__ == "__main__":
     STEP = 0.1
@@ -50,6 +66,6 @@ if __name__ == "__main__":
     top_offset = 0.03
     init_equations_factors()
     init_subplot()
+    init_equations_funcs()
     init_sliders()
-
     plt.show()
