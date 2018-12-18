@@ -81,8 +81,15 @@ def update(val):
         g = d * i + e
         gs.append(g)
     line.set_data(x, gs)
+    # find if there is intersect
+    confluence(x, np.array(ys), np.array(gs))
     # update UI
     fig.canvas.draw_idle()
+
+
+def confluence(x, a, b):
+    indx = np.argwhere(np.diff(np.sign(a - b))).flatten()
+    intersect.set_data(x[indx], a[indx])
 
 
 if __name__ == "__main__":
