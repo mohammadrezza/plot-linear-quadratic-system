@@ -10,18 +10,14 @@ class Color:
     lightgoldenrodyellow = "lightgoldenrodyellow"
 
 
-factor = dict()
-x = None
-
-
 def init_equations_factors():
     # ax*2 + bx + c = 0
-    factor["a"] = 1
-    factor["b"] = 1
-    factor["c"] = 1
+    factors["a"] = 1
+    factors["b"] = 1
+    factors["c"] = 1
     # dx + e = 0
-    factor["d"] = 2
-    factor["e"] = 2
+    factors["d"] = 2
+    factors["e"] = 2
 
 
 def init_subplot():
@@ -33,39 +29,58 @@ def init_subplot():
 
 
 def init_sliders():
+    global s_a, s_b, s_c, s_d, s_e
+    # region creating axes
     ax_a = plt.axes([left_offset, 0.05, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    Slider(ax_a, 'a', -RANGE, RANGE, valinit=factor["a"]).on_changed(update)
     ax_b = plt.axes([left_offset, 0.1, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    Slider(ax_b, 'b', -RANGE, RANGE, valinit=factor["b"]).on_changed(update)
     ax_c = plt.axes([left_offset, 0.15, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    Slider(ax_c, 'c', -RANGE, RANGE, valinit=factor["c"]).on_changed(update)
     ax_d = plt.axes([left_offset, 0.25, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    Slider(ax_d, 'd', -RANGE, RANGE, valinit=factor["d"]).on_changed(update)
     ax_e = plt.axes([left_offset, 0.3, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
-    Slider(ax_e, 'e', -RANGE, RANGE, valinit=factor["e"]).on_changed(update)
+    # endregion creating axes
+    # region creating sliders
+    s_a = Slider(ax_a, 'a', -RANGE, RANGE, valinit=factors["a"])
+    s_b = Slider(ax_b, 'b', -RANGE, RANGE, valinit=factors["b"])
+    s_c = Slider(ax_c, 'c', -RANGE, RANGE, valinit=factors["c"])
+    s_d = Slider(ax_d, 'd', -RANGE, RANGE, valinit=factors["d"])
+    s_e = Slider(ax_e, 'e', -RANGE, RANGE, valinit=factors["e"])
+    # endregion creating sliders
+    # region set sliders listeners
+    s_a.on_changed(update)
+    s_b.on_changed(update)
+    s_c.on_changed(update)
+    s_d.on_changed(update)
+    s_e.on_changed(update)
+    # endregion set sliders listeners
 
 
 def init_equations_funcs():
-    quadratic = (factor["a"] * x) ** 2 + factor["b"] * x + factor["c"]
-    linear = factor["d"] * x + factor["e"]
+    quadratic = (factors["a"] * x) ** 2 + factors["b"] * x + factors["c"]
+    linear = factors["d"] * x + factors["e"]
     quad, = plt.plot(x, quadratic, lw=1, color=Color.green)
     line, = plt.plot(x, linear, lw=1, color=Color.blue)
     intersect, = plt.plot(0, 0, 'ro')
 
 
 def update(val):
-    pass
+    print(val)
 
 
 if __name__ == "__main__":
+    # region init variables
+    x = None
+    s_a, s_b, s_c, s_d, s_e = None, None, None, None, None
     STEP = 0.1
     RANGE = 20.0
     FIG_SIZE = (9, 5)
     left_offset = 0.25
     right_offset = 0.6
     top_offset = 0.03
+    factors = dict()
+    # endregion init variables
+    # region init functions
     init_equations_factors()
     init_subplot()
     init_equations_funcs()
     init_sliders()
+    # endregion init functions
     plt.show()
