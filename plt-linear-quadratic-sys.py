@@ -21,7 +21,7 @@ def init_equations_factors():
 
 
 def init_subplot():
-    global x
+    global x, fig, ax
     fig, ax = plt.subplots(figsize=FIG_SIZE)
     plt.subplots_adjust(left=0.25, bottom=0.5)
     plt.axis([-RANGE, RANGE, -RANGE, RANGE], )
@@ -54,6 +54,7 @@ def init_sliders():
 
 
 def init_equations_funcs():
+    global quad, line, intersect
     quadratic = (factors["a"] * x) ** 2 + factors["b"] * x + factors["c"]
     linear = factors["d"] * x + factors["e"]
     quad, = plt.plot(x, quadratic, lw=1, color=Color.green)
@@ -62,13 +63,33 @@ def init_equations_funcs():
 
 
 def update(val):
-    print(val)
+    global x
+    a = s_a.val
+    b = s_b.val
+    c = s_c.val
+    d = s_d.val
+    e = s_e.val
+    ys = []
+    gs = []
+    # calculate new y for quad
+    for i in x:
+        y = a * (i ** 2) + b * i + c
+        ys.append(y)
+    quad.set_data(x, ys)
+    # calculate new y for linear
+    for i in x:
+        g = d * i + e
+        gs.append(g)
+    line.set_data(x, gs)
+    # update UI
+    fig.canvas.draw_idle()
 
 
 if __name__ == "__main__":
     # region init variables
-    x = None
+    x, fig, ax = None, None, None
     s_a, s_b, s_c, s_d, s_e = None, None, None, None, None
+    quad, line, intersect = None, None, None
     STEP = 0.1
     RANGE = 20.0
     FIG_SIZE = (9, 5)
