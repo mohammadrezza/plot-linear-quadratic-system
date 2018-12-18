@@ -91,12 +91,18 @@ def update(val):
 
 def confluence(x, a, b):
     indx = np.argwhere(np.diff(np.sign(a - b))).flatten()
-    if indx == []:
-        return 
+    if not indx.size:
+        text_box.set_val("None")
+        return
+    points = ""
     intersect.set_data(x[indx], a[indx])
     if len(x[indx]) > 0 and len(a[indx]) > 0:
-        text_box.set_val(str(round(float(x[indx][0]), 2)) + " , " + str(round(float(a[indx][0]), 2)) + "\n"
-                         + str(round(float(x[indx][1]), 2)) + " , " + str(round(float(a[indx][1]), 2)))
+        if len(indx) == 1:
+            points = str(round(float(x[indx][0]), 2)) + " , " + str(round(float(a[indx][0]), 2))
+        else:
+            points = str(round(float(x[indx][0]), 2)) + " , " + str(round(float(a[indx][0]), 2))
+            points += "\n" + str(round(float(x[indx][1]), 2)) + " , " + str(round(float(a[indx][1]), 2))
+        text_box.set_val(points)
 
 
 if __name__ == "__main__":
