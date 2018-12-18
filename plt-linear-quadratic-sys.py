@@ -29,13 +29,14 @@ def init_subplot():
 
 
 def init_sliders():
-    global s_a, s_b, s_c, s_d, s_e
+    global s_a, s_b, s_c, s_d, s_e, text_box
     # region creating axes
     ax_a = plt.axes([left_offset, 0.05, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
     ax_b = plt.axes([left_offset, 0.1, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
     ax_c = plt.axes([left_offset, 0.15, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
     ax_d = plt.axes([left_offset, 0.25, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
     ax_e = plt.axes([left_offset, 0.3, right_offset, top_offset], facecolor=Color.lightgoldenrodyellow)
+    ax_t = plt.axes([0.025, 0.5, 0.15, 0.15], facecolor=Color.lightgoldenrodyellow)
     # endregion creating axes
     # region creating sliders
     s_a = Slider(ax_a, 'a', -RANGE, RANGE, valinit=factors["a"])
@@ -43,6 +44,7 @@ def init_sliders():
     s_c = Slider(ax_c, 'c', -RANGE, RANGE, valinit=factors["c"])
     s_d = Slider(ax_d, 'd', -RANGE, RANGE, valinit=factors["d"])
     s_e = Slider(ax_e, 'e', -RANGE, RANGE, valinit=factors["e"])
+    text_box = TextBox(ax_t, '')
     # endregion creating sliders
     # region set sliders listeners
     s_a.on_changed(update)
@@ -89,13 +91,18 @@ def update(val):
 
 def confluence(x, a, b):
     indx = np.argwhere(np.diff(np.sign(a - b))).flatten()
+    if indx == []:
+        return 
     intersect.set_data(x[indx], a[indx])
+    if len(x[indx]) > 0 and len(a[indx]) > 0:
+        text_box.set_val(str(round(float(x[indx][0]), 2)) + " , " + str(round(float(a[indx][0]), 2)) + "\n"
+                         + str(round(float(x[indx][1]), 2)) + " , " + str(round(float(a[indx][1]), 2)))
 
 
 if __name__ == "__main__":
     # region init variables
     x, fig, ax = None, None, None
-    s_a, s_b, s_c, s_d, s_e = None, None, None, None, None
+    s_a, s_b, s_c, s_d, s_e, text_box = None, None, None, None, None, None
     quad, line, intersect = None, None, None
     STEP = 0.1
     RANGE = 20.0
